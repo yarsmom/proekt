@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import { User } from '../api/user/models/user.model.mjs';
 import { decodedJwt } from '../helpers/jwt/jwt.mjs';
 
@@ -14,7 +13,7 @@ export const auth = async (req, res, next) => {
 		if (!user) {
 			return res.status(401).send({ message: 'Authentication required' });
 		}
-		req.user = { login: decoded.login, token };
+		req.user = { login: decoded.login, token, role: user.role };
 		next();
 	} catch (error) {
 		console.log(error);

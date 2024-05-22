@@ -4,6 +4,7 @@ import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import morgan from 'morgan';
 import { userRouter } from './api/user/routers/user.router.mjs';
+import { feedRouter } from './api/feed/routes/feed.router.mjs';
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ mongoose
 
 app.use(express.json());
 app.use(morgan('common'));
-app.use('/api', userRouter);
+app.use('/api', [userRouter, feedRouter]);
 
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);
