@@ -38,7 +38,7 @@ export class FeedService {
 	}
 
 	async getFeedByName(name) {
-		if (typeof name !== 'string' || !name) return { status: 400, data: { message: 'Invalid credetians.' } };
+		if (!name) return { status: 400, data: { message: 'Invalid credetians.' } };
 		const feed = await this.feedRepository.getFeedByName(name);
 		if (!feed) return { status: 404, data: { message: 'The feed with this name does not exist.' } };
 		return { status: 200, data: feed };
@@ -61,7 +61,13 @@ export class FeedService {
 		return { status: 201, data: { message: 'Feed update' } };
 	}
 
-	async methodName(params) {}
+	async deleteFeedByName(name) {
+		if (!name) return { status: 400, data: { message: 'Invalid credetians.' } };
+		const feed = await this.feedRepository.getFeedByName(name);
+		if (!feed) return { status: 404, data: { message: 'The feed with this name does not exist.' } };
+		await this.feedRepository.deleteFeedByName(name);
+		return { status: 201, data: { message: 'Feed delete' } };
+	}
 
 	_validateParams(params, event = 'Update') {
 		const requiredFields = this.requiredFields;

@@ -48,5 +48,14 @@ export class FeedController {
 		}
 	}
 
-	async methodName(params) {}
+	async deleteFeedByName(req, res) {
+		try {
+			const { name } = req.query;
+			const result = await this.feedService.deleteFeedByName(name);
+			res.status(result.status).send(result.data);
+		} catch (error) {
+			console.log(error);
+			res.status(500).send({ message: 'Internal server error' });
+		}
+	}
 }

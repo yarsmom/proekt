@@ -21,5 +21,7 @@ export class FeedRepository {
 		return await this.feed.updateOne({ name }, params);
 	}
 
-	async methodName(params) {}
+	async deleteFeedByName(name) {
+		return await this.feed.deleteOne({ name });
+	}
 }

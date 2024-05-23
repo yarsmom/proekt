@@ -19,6 +19,6 @@ feedRouter.get('/feed/all', auth, role(['Admin', 'User']), feedController.getAll
 feedRouter.patch('/feed', auth, role(['Admin']), feedController.updateFeedByName.bind(feedController));
 
 //delete feed
-feedRouter.delete('/feed');
+feedRouter.delete('/feed', auth, role(['Admin']), feedController.deleteFeedByName.bind(feedController));
 
 export { feedRouter };
