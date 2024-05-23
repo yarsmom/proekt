@@ -14,7 +14,12 @@ export class FeedService {
 		return { status: 201, data: result };
 	}
 
-	async methodName(params) {}
+	async getFeedByName(name) {
+		if (typeof name !== 'string' || !name) return { status: 400, data: { message: 'Invalid credetians.' } };
+		const feed = await this.feedRepository.getFeedByName(name);
+		if (!feed) return { status: 404, data: { message: 'The feed with this name does not exist.' } };
+		return { status: 200, data: feed };
+	}
 
 	async methodName(params) {}
 

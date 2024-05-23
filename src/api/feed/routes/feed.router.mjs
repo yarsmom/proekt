@@ -7,10 +7,10 @@ const feedRouter = new express.Router();
 const feedController = new FeedController();
 
 //create feed
-feedRouter.post('/feed', auth, role('Admin'), feedController.createFeed.bind(feedController));
+feedRouter.post('/feed', auth, role(['Admin']), feedController.createFeed.bind(feedController));
 
 //get feed
-feedRouter.get('/feed');
+feedRouter.get('/feed', auth, role(['Admin', 'User']), feedController.getFeedByName.bind(feedController));
 
 //update feed
 feedRouter.patch('/feed');
