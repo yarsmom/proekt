@@ -37,7 +37,16 @@ export class FeedController {
 		}
 	}
 
-	async methodName(params) {}
+	async updateFeedByName(req, res) {
+		try {
+			const { name, params } = req.body;
+			const result = await this.feedService.updateFeedByName(name, params);
+			res.status(result.status).send(result.data);
+		} catch (error) {
+			console.log(error);
+			res.status(500).send({ message: 'Internal server error' });
+		}
+	}
 
 	async methodName(params) {}
 }

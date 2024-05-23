@@ -17,7 +17,9 @@ export class FeedRepository {
 		return await this.feed.find();
 	}
 
-	async methodName(params) {}
+	async updateFeedByName(name, params) {
+		return await this.feed.updateOne({ name }, params);
+	}
 
 	async methodName(params) {}
 }
