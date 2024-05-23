@@ -2,7 +2,8 @@ export const role = (requiredRole) => {
 	return function (req, res, next) {
 		try {
 			const { role } = req.user;
-			if (role === requiredRole) {
+			const validRole = requiredRole.includes(role);
+			if (validRole) {
 				next();
 			} else {
 				res.status(403).send({ message: 'Forbidden: Insufficient role' });
