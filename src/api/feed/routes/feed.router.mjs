@@ -12,6 +12,9 @@ feedRouter.post('/feed', auth, role(['Admin']), feedController.createFeed.bind(f
 //get feed
 feedRouter.get('/feed', auth, role(['Admin', 'User']), feedController.getFeedByName.bind(feedController));
 
+//get all feed
+feedRouter.get('/feed/all', auth, role(['Admin', 'User']), feedController.getAllFeed.bind(feedController));
+
 //update feed
 feedRouter.patch('/feed');
 

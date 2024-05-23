@@ -21,6 +21,12 @@ export class FeedService {
 		return { status: 200, data: feed };
 	}
 
+	async getAllFeed() {
+		const allFeed = await this.feedRepository.getAllFeed();
+		if (!allFeed.length) return { status: 404, data: { message: 'Feed not found' } };
+		return { status: 200, data: allFeed };
+	}
+
 	async methodName(params) {}
 
 	async methodName(params) {}

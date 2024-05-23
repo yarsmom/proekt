@@ -27,6 +27,16 @@ export class FeedController {
 		}
 	}
 
+	async getAllFeed(req, res) {
+		try {
+			const result = await this.feedService.getAllFeed();
+			res.status(result.status).send(result.data);
+		} catch (error) {
+			console.log(error);
+			res.status(500).send({ message: 'Internal server error' });
+		}
+	}
+
 	async methodName(params) {}
 
 	async methodName(params) {}
