@@ -8,9 +8,16 @@ export class UserService {
 	}
 
 	async singup(data) {
-		const { login, password } = data;
-		if (typeof login !== 'string' || typeof password !== 'string' || !login || !password) {
-			return { status: 400, data: { message: 'Invalid login or password.' } };
+		const { login, password, username } = data;
+		if (
+			typeof login !== 'string' ||
+			typeof password !== 'string' ||
+			typeof username !== 'string' ||
+			!login ||
+			!password ||
+			!username
+		) {
+			return { status: 400, data: { message: 'Invalid login or password or username.' } };
 		}
 		if (password.length < 6) {
 			return { status: 400, data: { message: 'The password must be longer than 6 characters.' } };
@@ -20,7 +27,7 @@ export class UserService {
 			return { status: 400, data: { message: 'A user with this username is already registered.' } };
 		}
 		const hashPass = await generatePasswordHash(password);
-		await this.userRepository.createUser({ login, password: hashPass, role: 'User' });
+		await this.userRepository.createUser({ login, password: hashPass, role: 'User', username });
 		return { status: 201, data: { message: 'User created' } };
 	}
 
@@ -43,7 +50,7 @@ export class UserService {
 			{ _id: user._id.toString() },
 			{ $push: { tokens: { token: jwt } } }
 		);
-		return { status: 200, data: { message: 'Successful login.', jwt } };
+		return { status: 201, data: { message: 'Successful login.', jwt, user: { login, username: user.username } } };
 	}
 
 	async logout(token) {
