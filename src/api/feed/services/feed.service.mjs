@@ -38,7 +38,7 @@ export class FeedService {
 	}
 
 	async getFeedByName(name) {
-		if (!name) return { status: 400, data: { message: 'Invalid credetians.' } };
+		if (!name || typeof name !== 'string') return { status: 400, data: { message: 'Invalid credetians.' } };
 		const feed = await this.feedRepository.getFeedByName(name);
 		if (!feed) return { status: 404, data: { message: 'The feed with this name does not exist.' } };
 		return { status: 200, data: feed };
