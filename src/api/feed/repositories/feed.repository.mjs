@@ -24,4 +24,8 @@ export class FeedRepository {
 	async deleteFeedByName(name) {
 		return await this.feed.deleteOne({ name });
 	}
+
+	async getManyFeedByIds(feedArrayId) {
+		return await this.feed.find({ _id: feedArrayId });
+	}
 }

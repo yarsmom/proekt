@@ -1,11 +1,11 @@
-import express from 'express';
-import * as dotenv from 'dotenv';
-//import { countryRouter } from "./src/routes/country.router.mjs";
-import mongoose from 'mongoose';
-import morgan from 'morgan';
 import { userRouter } from './api/user/routers/user.router.mjs';
 import { feedRouter } from './api/feed/routes/feed.router.mjs';
 import { cowRouter } from './api/cow/routers/cow.router.mjs';
+import { mathRouter } from './api/math/routers/math.router.mjs';
+import express from 'express';
+import * as dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import morgan from 'morgan';
 import cors from 'cors';
 
 dotenv.config();
@@ -24,7 +24,7 @@ mongoose
 app.use(cors());
 app.use(express.json());
 app.use(morgan('common'));
-app.use('/api', [userRouter, feedRouter, cowRouter]);
+app.use('/api', [userRouter, feedRouter, cowRouter, mathRouter]);
 
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);

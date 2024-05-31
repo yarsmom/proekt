@@ -69,6 +69,10 @@ export class FeedService {
 		return { status: 201, data: { message: 'Feed delete' } };
 	}
 
+	async getManyFeedByIds(feedArrayId) {
+		return await this.feedRepository.getManyFeedByIds(feedArrayId);
+	}
+
 	_validateParams(params, event = 'Update') {
 		const requiredFields = this.requiredFields;
 		if (event === 'Create') {

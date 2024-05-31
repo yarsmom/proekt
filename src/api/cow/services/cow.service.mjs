@@ -57,6 +57,10 @@ export class CowService {
 		return { status: 201, data: { message: 'Cow delete' } };
 	}
 
+	async getCowById(id) {
+		return this.cowRepository.getCowById(id);
+	}
+
 	_validateParams(params, event = 'Update') {
 		const requiredFields = this.requiredFields;
 		if (event === 'Create') {

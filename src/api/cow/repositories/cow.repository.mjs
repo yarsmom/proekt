@@ -24,4 +24,8 @@ export class CowRepository {
 	async deleteCowByName(name) {
 		return await this.cow.deleteOne({ name });
 	}
+
+	async getCowById(id) {
+		return await this.cow.findById(id);
+	}
 }
