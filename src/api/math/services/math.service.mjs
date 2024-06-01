@@ -22,7 +22,13 @@ export class MathService {
 		const CALC = this._CALCCalculation({ AnimalWeight, cow, GAIN });
 		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
 		const AFamt = this._AFamtCalculation({ DMamt, feeds });
+		const offeredDM = this._offeredDMCalculation({ DMFEDDAY, AnimalWeight });
+		console.log('offeredDM :>> ', offeredDM);
 		return { status: 200, data: { message: 'ok' } };
+	}
+
+	_offeredDMCalculation({ DMFEDDAY, AnimalWeight }) {
+		return parseFloat(((DMFEDDAY / AnimalWeight) * 100).toFixed(2));
 	}
 
 	_AFamtCalculation({ DMamt, feeds }) {
@@ -62,7 +68,6 @@ export class MathService {
 
 	_isValidParams(data) {
 		const { DMFEDDAY, AnimalWeight, feedArrayId, cowId, DMamt } = data;
-		console.log('DMamt :>> ', DMamt);
 		if (
 			!DMFEDDAY ||
 			!DMamt ||
