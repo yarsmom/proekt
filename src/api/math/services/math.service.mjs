@@ -9,8 +9,9 @@ export class MathService {
 
 	async calculationOfFeedMixture(data) {
 		const isValidParams = this._isValidParams(data);
+		console.log('isValidParams :>> ', isValidParams);
 		if (!isValidParams) return { status: 400, data: { message: 'Invalid Credetians' } };
-		const { DMFEDDAY, AnimalWeight, feedArrayId, cowId } = data;
+		const { DMFEDDAY, AnimalWeight, DMamt, feedArrayId, cowId } = data;
 		const feeds = await this.feedService.getManyFeedByIds(feedArrayId);
 		const cow = await this.cowService.getCowById(cowId);
 		console.log('feeds :>> ', feeds);
@@ -20,7 +21,14 @@ export class MathService {
 		const PROT = this._PROTCalculation({ AnimalWeight, cow, GAIN });
 		const CALC = this._CALCCalculation({ AnimalWeight, cow, GAIN });
 		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
+		const AFamt = this._AFamtCalculation({ DMamt, feeds });
 		return { status: 200, data: { message: 'ok' } };
+	}
+
+	_AFamtCalculation({ DMamt, feeds }) {
+		const AFamt = feeds.map((feed) => parseFloat(((DMamt / feed.DM) * 100).toFixed(2)));
+		console.log('AFamt :>> ', AFamt);
+		return AFamt;
 	}
 
 	_PHOSCalculation({ AnimalWeight, cow, GAIN }) {
@@ -54,17 +62,22 @@ export class MathService {
 	}
 
 	_isValidParams(data) {
-		const { DMFEDDAY, AnimalWeight, feedArrayId, cowId } = data;
-		return (
+		const { DMFEDDAY, AnimalWeight, feedArrayId, cowId, DMamt } = data;
+		console.log('DMamt :>> ', DMamt);
+		if (
 			!DMFEDDAY ||
+			!DMamt ||
 			!AnimalWeight ||
 			!feedArrayId ||
-			!feedArrayId.lenght ||
+			!feedArrayId.length ||
 			!feedArrayId.every((element) => typeof element === 'string') ||
 			!cowId ||
 			typeof AnimalWeight !== 'number' ||
 			typeof DMFEDDAY !== 'number' ||
-			typeof cowId !== 'string'
-		);
+			typeof cowId !== 'string' ||
+			typeof DMamt !== 'number'
+		)
+			return false;
+		return true;
 	}
 }
