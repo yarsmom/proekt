@@ -13,10 +13,20 @@ export class MathService {
 		const { DMFEDDAY, AnimalWeight, feedArrayId, cowId } = data;
 		const feeds = await this.feedService.getManyFeedByIds(feedArrayId);
 		const cow = await this.cowService.getCowById(cowId);
+		console.log('feeds :>> ', feeds);
+		console.log('cow :>> ', cow);
 		const GAIN = this._GAINCalculation({ DMFEDDAY, AnimalWeight, feeds, cow });
-		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
+		console.log('GAIN :>> ', GAIN);
+		const PROT = this._PROTCalculation({ AnimalWeight, cow, GAIN });
 		const CALC = this._CALCCalculation({ AnimalWeight, cow, GAIN });
+		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
 		return { status: 200, data: { message: 'ok' } };
+	}
+
+	_PHOSCalculation({ AnimalWeight, cow, GAIN }) {
+		const m075 = parseFloat((AnimalWeight ** 0.75).toFixed(2));
+		const PHOS = parseFloat((cow.a3 + 0.1 * m075 + cow.b3 * GAIN - 0.02 * GAIN * m075).toFixed(2));
+		return PHOS;
 	}
 
 	_CALCCalculation({ AnimalWeight, cow, GAIN }) {
@@ -37,10 +47,10 @@ export class MathService {
 		return GAIN;
 	}
 
-	_PHOSCalculation({ AnimalWeight, cow, GAIN }) {
+	_PROTCalculation({ AnimalWeight, cow, GAIN }) {
 		const m075 = parseFloat((AnimalWeight ** 0.75).toFixed(2));
-		const PHOS = parseFloat((cow.a1 + 0.007 * m075 + 0.45 * GAIN - 0.0011 * GAIN * m075).toFixed(2));
-		return PHOS;
+		const PROT = parseFloat((cow.a1 + 0.007 * m075 + 0.45 * GAIN - 0.0011 * GAIN * m075).toFixed(2));
+		return PROT;
 	}
 
 	_isValidParams(data) {
