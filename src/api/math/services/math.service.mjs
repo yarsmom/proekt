@@ -22,10 +22,17 @@ export class MathService {
 		const CALC = this._CALCCalculation({ AnimalWeight, cow, GAIN });
 		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
 		const AFamt = this._AFamtCalculation({ DMamt, feeds });
-		const offeredDM = this._offeredDMCalculation({ DMFEDDAY, AnimalWeight });
+		const offeredDMI = this._offeredDMICalculation({ DMFEDDAY, AnimalWeight });
 		const NDFallowableDMI = this._NDFallowableDMICalculation(feeds);
+		const OfferVsAllov = this._offerVsAllovCalculation(offeredDMI, NDFallowableDMI);
+		console.log('offeredDMI :>> ', offeredDMI);
 		console.log('NDFallowableDMI :>> ', NDFallowableDMI);
+		console.log('OfferVsAllov :>> ', OfferVsAllov);
 		return { status: 200, data: { message: 'ok' } };
+	}
+
+	_offerVsAllovCalculation(offeredDMI, NDFallowableDMI) {
+		return parseFloat((offeredDMI / NDFallowableDMI).toFixed(2));
 	}
 
 	_NDFallowableDMICalculation(feeds) {
@@ -33,7 +40,7 @@ export class MathService {
 		return parseFloat((120 / sumAllNEm).toFixed(2));
 	}
 
-	_offeredDMCalculation({ DMFEDDAY, AnimalWeight }) {
+	_offeredDMICalculation({ DMFEDDAY, AnimalWeight }) {
 		return parseFloat(((DMFEDDAY / AnimalWeight) * 100).toFixed(2));
 	}
 
