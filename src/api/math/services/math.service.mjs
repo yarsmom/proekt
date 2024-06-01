@@ -27,7 +27,6 @@ export class MathService {
 
 	_AFamtCalculation({ DMamt, feeds }) {
 		const AFamt = feeds.map((feed) => parseFloat(((DMamt / feed.DM) * 100).toFixed(2)));
-		console.log('AFamt :>> ', AFamt);
 		return AFamt;
 	}
 
