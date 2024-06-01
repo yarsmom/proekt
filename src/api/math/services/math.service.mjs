@@ -9,7 +9,6 @@ export class MathService {
 
 	async calculationOfFeedMixture(data) {
 		const isValidParams = this._isValidParams(data);
-		console.log('isValidParams :>> ', isValidParams);
 		if (!isValidParams) return { status: 400, data: { message: 'Invalid Credetians' } };
 		const { DMFEDDAY, AnimalWeight, DMamt, feedArrayId, cowId } = data;
 		const feeds = await this.feedService.getManyFeedByIds(feedArrayId);
@@ -25,10 +24,21 @@ export class MathService {
 		const offeredDMI = this._offeredDMICalculation({ DMFEDDAY, AnimalWeight });
 		const NDFallowableDMI = this._NDFallowableDMICalculation(feeds);
 		const OfferVsAllov = this._offerVsAllovCalculation(offeredDMI, NDFallowableDMI);
-		console.log('offeredDMI :>> ', offeredDMI);
-		console.log('NDFallowableDMI :>> ', NDFallowableDMI);
-		console.log('OfferVsAllov :>> ', OfferVsAllov);
+		const _C_A_R = this._C_A_R_Calculation(DMamt, feeds, DMFEDDAY);
+		// console.log('offeredDMI :>> ', offeredDMI);
+		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
+		// console.log('OfferVsAllov :>> ', OfferVsAllov);
 		return { status: 200, data: { message: 'ok' } };
+	}
+
+	_C_A_R_Calculation(DMamt, feeds, DMFEDDAY) {
+		const sumDMamt = parseFloat(DMamt.reduce((sum, el) => sum + el, 0).toFixed(2));
+		const C = DMamt.map((el) => parseFloat(((el / sumDMamt) * 100).toFixed(2)));
+		const sumC = parseFloat(C.reduce((sum, el) => sum + el, 0).toFixed(2));
+		const R = C.map((el, i) => parseFloat(((el * 100) / feeds[i].DM).toFixed(2)));
+		const sumR = parseFloat(R.reduce((sum, el) => sum + el, 0).toFixed(2));
+		const A = parseFloat(((DMFEDDAY * sumR) / sumC).toFixed(2));
+		return [C, R, A];
 	}
 
 	_offerVsAllovCalculation(offeredDMI, NDFallowableDMI) {
