@@ -45,7 +45,7 @@ export class MathService {
 	}
 
 	_AFamtCalculation({ DMamt, feeds }) {
-		const AFamt = feeds.map((feed) => parseFloat(((DMamt / feed.DM) * 100).toFixed(2)));
+		const AFamt = feeds.map((feed, i) => parseFloat(((DMamt[i] / feed.DM) * 100).toFixed(2)));
 		return AFamt;
 	}
 
@@ -84,6 +84,8 @@ export class MathService {
 		if (
 			!DMFEDDAY ||
 			!DMamt ||
+			!DMamt.length ||
+			!DMamt.every((element) => typeof element === 'number') ||
 			!AnimalWeight ||
 			!feedArrayId ||
 			!feedArrayId.length ||
@@ -91,8 +93,7 @@ export class MathService {
 			!cowId ||
 			typeof AnimalWeight !== 'number' ||
 			typeof DMFEDDAY !== 'number' ||
-			typeof cowId !== 'string' ||
-			typeof DMamt !== 'number'
+			typeof cowId !== 'string'
 		)
 			return false;
 		return true;
