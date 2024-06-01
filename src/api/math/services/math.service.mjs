@@ -23,8 +23,14 @@ export class MathService {
 		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
 		const AFamt = this._AFamtCalculation({ DMamt, feeds });
 		const offeredDM = this._offeredDMCalculation({ DMFEDDAY, AnimalWeight });
-		console.log('offeredDM :>> ', offeredDM);
+		const NDFallowableDMI = this._NDFallowableDMICalculation(feeds);
+		console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		return { status: 200, data: { message: 'ok' } };
+	}
+
+	_NDFallowableDMICalculation(feeds) {
+		const sumAllNEm = parseFloat(feeds.reduce((sum, feed) => sum + feed.NEm, 0).toFixed(2));
+		return parseFloat((120 / sumAllNEm).toFixed(2));
 	}
 
 	_offeredDMCalculation({ DMFEDDAY, AnimalWeight }) {
