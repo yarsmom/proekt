@@ -35,6 +35,7 @@ export class MathService {
 		const calculatedMoistureOfASISmixture = this._calculatedMoistureOfASISmixture(C_A_R[0], C_A_R[1]);
 		const cost = this._costCalculation(feeds);
 		const NDF = this._NDF_Calculation(feeds);
+		const eNDF = this._eNDF_Calculation(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -53,9 +54,17 @@ export class MathService {
 						value: NDF,
 						status: NDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
 					},
+					eNDS: {
+						value: eNDF,
+						status: eNDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
+					},
 				},
 			},
 		};
+	}
+
+	_eNDF_Calculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.eNDF).toFixed(2)), 0);
 	}
 
 	_NDF_Calculation(feeds) {
