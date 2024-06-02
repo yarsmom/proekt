@@ -10,7 +10,8 @@ export class MathService {
 	async calculationOfFeedMixture(data) {
 		const isValidParams = this._isValidParams(data);
 		if (!isValidParams) return { status: 400, data: { message: 'Invalid Credetians' } };
-		const { DMFEDDAY, AnimalWeight, DMamt, feedArrayId, cowId } = data;
+		const { DMFEDDAY, numberCow, DMamt, feedArrayId, cowId } = data;
+		let AnimalWeight = data.AnimalWeight * numberCow;
 		const feeds = await this.feedService.getManyFeedByIds(feedArrayId);
 		const cow = await this.cowService.getCowById(cowId);
 		console.log('feeds :>> ', feeds);
@@ -53,6 +54,8 @@ export class MathService {
 		const Iron = this._Elems_Sum(FE);
 		const MN = this._Elems_Calculation(feeds, C_A_R[0], 'MN');
 		const Manganese = this._Elems_Sum(MN);
+		const SE = this._Elems_Calculation(feeds, C_A_R[0], 'SE');
+		const Selenium = this._Elems_Sum(SE);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -152,6 +155,17 @@ export class MathService {
 								: Manganese < 49
 									? 'Достатньо'
 									: Manganese < 999
+										? 'Надлишок'
+										: 'Токсична',
+					},
+					Selenium: {
+						value: Selenium,
+						status:
+							Selenium < 19
+								? 'Дефіцит'
+								: Selenium < 39
+									? 'Достатньо'
+									: Selenium < 499
 										? 'Надлишок'
 										: 'Токсична',
 					},
