@@ -42,6 +42,7 @@ export class MathService {
 		const Calcium = this._CalciumCalculation(feeds);
 		const Phosphorus = this._PhosphorusCalculation(feeds);
 		const MG = this._MG_Calculation(feeds, C_A_R[0]);
+		const Magnesium = this._magnesiumCalculation(MG);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -56,7 +57,6 @@ export class MathService {
 					TDN: TDN_Report,
 					calculatedMoistureOfASISmixture,
 					cost,
-					MG,
 					NDF: {
 						value: NDF,
 						status: NDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
@@ -92,9 +92,24 @@ export class MathService {
 										? 'Надлишок'
 										: 'Токсична',
 					},
+					Magnesium: {
+						value: Magnesium,
+						status:
+							Magnesium < 0.17
+								? 'Дефіцит'
+								: Magnesium < 0.3
+									? 'Достатньо'
+									: Magnesium < 0.7
+										? 'Надлишок'
+										: 'Токсична',
+					},
 				},
 			},
 		};
+	}
+
+	_magnesiumCalculation(MG) {
+		return MG.reduce((sum, MG) => parseFloat((sum + MG).toFixed(2)), 0);
 	}
 
 	_MG_Calculation(feeds, C) {
