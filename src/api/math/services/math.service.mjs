@@ -51,6 +51,8 @@ export class MathService {
 		const Copper = this._Elems_Sum(CU);
 		const FE = this._Elems_Calculation(feeds, C_A_R[0], 'FE');
 		const Iron = this._Elems_Sum(FE);
+		const MN = this._Elems_Calculation(feeds, C_A_R[0], 'MN');
+		const Manganese = this._Elems_Sum(MN);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -141,6 +143,17 @@ export class MathService {
 					Iron: {
 						value: Iron,
 						status: Iron < 49 ? 'Дефіцит' : Iron < 99 ? 'Достатньо' : Iron < 999 ? 'Надлишок' : 'Токсична',
+					},
+					Manganese: {
+						value: Manganese,
+						status:
+							Manganese < 19
+								? 'Дефіцит'
+								: Manganese < 49
+									? 'Достатньо'
+									: Manganese < 999
+										? 'Надлишок'
+										: 'Токсична',
 					},
 				},
 			},
