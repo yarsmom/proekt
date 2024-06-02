@@ -32,6 +32,7 @@ export class MathService {
 		const NEgMegacalCWT = this._NEgMegacalCWTCalculation(feeds);
 		const TDN_array = this._TDN_arrayCalculation(feeds, C_A_R[0]);
 		const TDN_Report = this._TDN_ReportCalculation(TDN_array);
+		const calculatedMoistureOfASISmixture = this._calculatedMoistureOfASISmixture(C_A_R[0], C_A_R[1]);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -39,6 +40,12 @@ export class MathService {
 			status: 200,
 			data: { report: { NEmMegacalCWT_DRY, MultipleOfNem, MEMegcalCWT, NEgMegacalCWT, TDN: TDN_Report } },
 		};
+	}
+
+	_calculatedMoistureOfASISmixture(C, R) {
+		const sumC = C.reduce((sum, C) => parseFloat((sum + C).toFixed(2)), 0);
+		const sumR = R.reduce((sum, R) => parseFloat((sum + R).toFixed(2)), 0);
+		return parseFloat((100 - (sumC / sumR) * 100).toFixed(2));
 	}
 
 	_TDN_ReportCalculation(TDN_array) {
