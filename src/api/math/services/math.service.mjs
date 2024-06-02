@@ -43,6 +43,8 @@ export class MathService {
 		const Phosphorus = this._PhosphorusCalculation(feeds);
 		const MG = this._MG_Calculation(feeds, C_A_R[0]);
 		const Magnesium = this._magnesiumCalculation(MG);
+		const S = this._S_Calculation(feeds, C_A_R[0]);
+		const Sulfur = this._sulfurCalculation(S);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -103,9 +105,28 @@ export class MathService {
 										? 'Надлишок'
 										: 'Токсична',
 					},
+					Sulfur: {
+						value: Sulfur,
+						status:
+							Sulfur < 0.07
+								? 'Дефіцит'
+								: Sulfur < 0.1
+									? 'Достатньо'
+									: Sulfur < 0.3
+										? 'Надлишок'
+										: 'Токсична',
+					},
 				},
 			},
 		};
+	}
+
+	_sulfurCalculation(S) {
+		return S.reduce((sum, s) => parseFloat((sum + s).toFixed(2)), 0);
+	}
+
+	_S_Calculation(feeds, C) {
+		return feeds.map((feed, i) => parseFloat(((feed.S * C[i]) / 100).toFixed(2)));
 	}
 
 	_magnesiumCalculation(MG) {
