@@ -24,16 +24,29 @@ export class MathService {
 		const offeredDMI = this._offeredDMICalculation({ DMFEDDAY, AnimalWeight });
 		const NDFallowableDMI = this._NDFallowableDMICalculation(feeds);
 		const OfferVsAllov = this._offerVsAllovCalculation(offeredDMI, NDFallowableDMI);
-		const _C_A_R = this._C_A_R_Calculation(DMamt, feeds, DMFEDDAY);
+		const C_A_R = this._C_A_R_Calculation(DMamt, feeds, DMFEDDAY);
 		const NEmMegacalCWT_DM = this._NEmMegacalCWTCalculationDM(AnimalWeight, DMFEDDAY);
 		const NEmMegacalCWT_DRY = this._NEmMegacalCWTCalculationDRY(feeds);
 		const MultipleOfNem = this._MultipleOfNemCalculation(NEmMegacalCWT_DM, NEmMegacalCWT_DRY);
 		const MEMegcalCWT = this._MEMegcalCWTCalculation(feeds);
 		const NEgMegacalCWT = this._NEgMegacalCWTCalculation(feeds);
+		const TDN_array = this._TDN_arrayCalculation(feeds, C_A_R[0]);
+		const TDN_Report = this._TDN_ReportCalculation(TDN_array);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
-		return { status: 200, data: { report: { NEmMegacalCWT_DRY, MultipleOfNem, MEMegcalCWT, NEgMegacalCWT } } };
+		return {
+			status: 200,
+			data: { report: { NEmMegacalCWT_DRY, MultipleOfNem, MEMegcalCWT, NEgMegacalCWT, TDN: TDN_Report } },
+		};
+	}
+
+	_TDN_ReportCalculation(TDN_array) {
+		return TDN_array.reduce((sum, TDN) => parseFloat((sum + TDN).toFixed(2)), 0);
+	}
+
+	_TDN_arrayCalculation(feeds, comp) {
+		return feeds.map((feed, i) => parseFloat(((comp[i] * feed.TDN) / 100).toFixed(2)));
 	}
 
 	_NEgMegacalCWTCalculation(feeds) {
