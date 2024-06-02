@@ -45,6 +45,8 @@ export class MathService {
 		const Magnesium = this._magnesiumCalculation(MG);
 		const S = this._S_Calculation(feeds, C_A_R[0]);
 		const Sulfur = this._sulfurCalculation(S);
+		const CO = this._CO_Calculation(feeds, C_A_R[0]);
+		const Cobalt = this._Cobalt_Calculation(CO);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -116,9 +118,28 @@ export class MathService {
 										? 'Надлишок'
 										: 'Токсична',
 					},
+					Cobalt: {
+						value: Cobalt,
+						status:
+							Cobalt < 0.06
+								? 'Дефіцит'
+								: Cobalt < 0.1
+									? 'Достатньо'
+									: Cobalt < 4.9
+										? 'Надлишок'
+										: 'Токсична',
+					},
 				},
 			},
 		};
+	}
+
+	_Cobalt_Calculation(CO) {
+		return CO.reduce((sum, co) => parseFloat((sum + co).toFixed(2)), 0);
+	}
+
+	_CO_Calculation(feeds, C) {
+		return feeds.map((feed, i) => parseFloat(((feed.CO * C[i]) / 100).toFixed(2)));
 	}
 
 	_sulfurCalculation(S) {
