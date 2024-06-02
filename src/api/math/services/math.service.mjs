@@ -33,13 +33,29 @@ export class MathService {
 		const TDN_array = this._TDN_arrayCalculation(feeds, C_A_R[0]);
 		const TDN_Report = this._TDN_ReportCalculation(TDN_array);
 		const calculatedMoistureOfASISmixture = this._calculatedMoistureOfASISmixture(C_A_R[0], C_A_R[1]);
+		const cost = this._costCalculation(feeds);
+
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
 		return {
 			status: 200,
-			data: { report: { NEmMegacalCWT_DRY, MultipleOfNem, MEMegcalCWT, NEgMegacalCWT, TDN: TDN_Report } },
+			data: {
+				report: {
+					NEmMegacalCWT_DRY,
+					MultipleOfNem,
+					MEMegcalCWT,
+					NEgMegacalCWT,
+					TDN: TDN_Report,
+					calculatedMoistureOfASISmixture,
+					cost,
+				},
+			},
 		};
+	}
+
+	_costCalculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CostCWT).toFixed(2)), 0);
 	}
 
 	_calculatedMoistureOfASISmixture(C, R) {
