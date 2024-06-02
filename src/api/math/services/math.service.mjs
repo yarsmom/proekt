@@ -49,6 +49,8 @@ export class MathService {
 		const Cobalt = this._Elems_Sum(CO);
 		const CU = this._Elems_Calculation(feeds, C_A_R[0], 'CU');
 		const Copper = this._Elems_Sum(CU);
+		const FE = this._Elems_Calculation(feeds, C_A_R[0], 'FE');
+		const Iron = this._Elems_Sum(FE);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -135,6 +137,10 @@ export class MathService {
 						value: Copper,
 						status:
 							Copper < 3 ? 'Дефіцит' : Copper < 9 ? 'Достатньо' : Copper < 114 ? 'Надлишок' : 'Токсична',
+					},
+					Iron: {
+						value: Iron,
+						status: Iron < 49 ? 'Дефіцит' : Iron < 99 ? 'Достатньо' : Iron < 999 ? 'Надлишок' : 'Токсична',
 					},
 				},
 			},
