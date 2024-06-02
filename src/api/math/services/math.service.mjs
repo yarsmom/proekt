@@ -26,29 +26,29 @@ export class MathService {
 		const OfferVsAllov = this._offerVsAllovCalculation(offeredDMI, NDFallowableDMI);
 		const C_A_R = this._C_A_R_Calculation(DMamt, feeds, DMFEDDAY);
 		const NEmMegacalCWT_DM = this._NEmMegacalCWTCalculationDM(AnimalWeight, DMFEDDAY);
-		const NEmMegacalCWT_DRY = this._NEmMegacalCWTCalculationDRY(feeds);
+		const NEmMegacalCWT_DRY = this._sumElemFeedCalculation(feeds, 'NEm');
 		const MultipleOfNem = this._MultipleOfNemCalculation(NEmMegacalCWT_DM, NEmMegacalCWT_DRY);
-		const MEMegcalCWT = this._MEMegcalCWTCalculation(feeds);
-		const NEgMegacalCWT = this._NEgMegacalCWTCalculation(feeds);
+		const MEMegcalCWT = this._sumElemFeedCalculation(feeds, 'ME');
+		const NEgMegacalCWT = this._sumElemFeedCalculation(feeds, 'NEg');
 		const TDN_array = this._TDN_arrayCalculation(feeds, C_A_R[0]);
 		const TDN_Report = this._TDN_ReportCalculation(TDN_array);
 		const calculatedMoistureOfASISmixture = this._calculatedMoistureOfASISmixture(C_A_R[0], C_A_R[1]);
-		const cost = this._costCalculation(feeds);
-		const NDF = this._NDF_Calculation(feeds);
-		const eNDF = this._eNDF_Calculation(feeds);
-		const crudeProtein = this._crudeProteinCalculation(feeds);
-		const DIP = this._DIP_Calculation(feeds);
-		const Potassium = this._PotassiumCalculation(feeds);
-		const Calcium = this._CalciumCalculation(feeds);
-		const Phosphorus = this._PhosphorusCalculation(feeds);
-		const MG = this._MG_Calculation(feeds, C_A_R[0]);
-		const Magnesium = this._magnesiumCalculation(MG);
-		const S = this._S_Calculation(feeds, C_A_R[0]);
-		const Sulfur = this._sulfurCalculation(S);
-		const CO = this._CO_Calculation(feeds, C_A_R[0]);
-		const Cobalt = this._Cobalt_Calculation(CO);
-		const CU = this._CU_Calculation(feeds, C_A_R[0]);
-		const Copper = this._Copper_Calculation(CU);
+		const cost = this._sumElemFeedCalculation(feeds, 'CostCWT');
+		const NDF = this._sumElemFeedCalculation(feeds, 'NDF');
+		const eNDF = this._sumElemFeedCalculation(feeds, 'eNDF');
+		const crudeProtein = this._sumElemFeedCalculation(feeds, 'CP');
+		const DIP = this._sumElemFeedCalculation(feeds, 'DIP');
+		const Potassium = this._sumElemFeedCalculation(feeds, 'K');
+		const Calcium = this._sumElemFeedCalculation(feeds, 'CA');
+		const Phosphorus = this._sumElemFeedCalculation(feeds, 'P');
+		const MG = this._Elems_Calculation(feeds, C_A_R[0], 'MG');
+		const Magnesium = this._Elems_Sum(MG);
+		const S = this._Elems_Calculation(feeds, C_A_R[0], 'S');
+		const Sulfur = this._Elems_Sum(S);
+		const CO = this._Elems_Calculation(feeds, C_A_R[0], 'CO');
+		const Cobalt = this._Elems_Sum(CO);
+		const CU = this._Elems_Calculation(feeds, C_A_R[0], 'CU');
+		const Copper = this._Elems_Sum(CU);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -141,68 +141,16 @@ export class MathService {
 		};
 	}
 
-	_Copper_Calculation(CU) {
-		return CU.reduce((sum, cu) => parseFloat((sum + cu).toFixed(2)), 0);
+	_Elems_Sum(elems) {
+		return elems.reduce((sum, elem) => parseFloat((sum + elem).toFixed(2)), 0);
 	}
 
-	_CU_Calculation(feeds, C) {
-		return feeds.map((feed, i) => parseFloat(((feed.CU * C[i]) / 100).toFixed(2)));
+	_Elems_Calculation(feeds, C, elem) {
+		return feeds.map((feed, i) => parseFloat(((feed[elem] * C[i]) / 100).toFixed(2)));
 	}
 
-	_Cobalt_Calculation(CO) {
-		return CO.reduce((sum, co) => parseFloat((sum + co).toFixed(2)), 0);
-	}
-
-	_CO_Calculation(feeds, C) {
-		return feeds.map((feed, i) => parseFloat(((feed.CO * C[i]) / 100).toFixed(2)));
-	}
-
-	_sulfurCalculation(S) {
-		return S.reduce((sum, s) => parseFloat((sum + s).toFixed(2)), 0);
-	}
-
-	_S_Calculation(feeds, C) {
-		return feeds.map((feed, i) => parseFloat(((feed.S * C[i]) / 100).toFixed(2)));
-	}
-
-	_magnesiumCalculation(MG) {
-		return MG.reduce((sum, MG) => parseFloat((sum + MG).toFixed(2)), 0);
-	}
-
-	_MG_Calculation(feeds, C) {
-		return feeds.map((feed, i) => parseFloat(((feed.MG * C[i]) / 100).toFixed(2)));
-	}
-
-	_PhosphorusCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.P).toFixed(2)), 0);
-	}
-
-	_CalciumCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CA).toFixed(2)), 0);
-	}
-
-	_PotassiumCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.K).toFixed(2)), 0);
-	}
-
-	_DIP_Calculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.DIP).toFixed(2)), 0);
-	}
-
-	_crudeProteinCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CP).toFixed(2)), 0);
-	}
-
-	_eNDF_Calculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.eNDF).toFixed(2)), 0);
-	}
-
-	_NDF_Calculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.NDF).toFixed(2)), 0);
-	}
-
-	_costCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CostCWT).toFixed(2)), 0);
+	_sumElemFeedCalculation(feeds, el) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed[el]).toFixed(2)), 0);
 	}
 
 	_calculatedMoistureOfASISmixture(C, R) {
@@ -217,14 +165,6 @@ export class MathService {
 
 	_TDN_arrayCalculation(feeds, comp) {
 		return feeds.map((feed, i) => parseFloat(((comp[i] * feed.TDN) / 100).toFixed(2)));
-	}
-
-	_NEgMegacalCWTCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.NEg).toFixed(2)), 0);
-	}
-
-	_MEMegcalCWTCalculation(feeds) {
-		return feeds.reduce((sum, feed) => parseFloat((sum + feed.ME).toFixed(2)), 0);
 	}
 
 	_MultipleOfNemCalculation(NEmMegacalCWT_DM, NEmMegacalCWT_DRY) {
