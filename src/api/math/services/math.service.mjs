@@ -36,6 +36,7 @@ export class MathService {
 		const cost = this._costCalculation(feeds);
 		const NDF = this._NDF_Calculation(feeds);
 		const eNDF = this._eNDF_Calculation(feeds);
+		const crudeProtein = this._crudeProtein(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -56,11 +57,19 @@ export class MathService {
 					},
 					eNDS: {
 						value: eNDF,
-						status: eNDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
+						status: eNDF < 24 ? 'Дефіцит' : eNDF < 34 ? 'Достатньо' : 'Надлишок',
+					},
+					crudeProtein: {
+						value: crudeProtein,
+						status: crudeProtein < 14 ? 'Дефіцит' : crudeProtein < 19 ? 'Достатньо' : 'Надлишок',
 					},
 				},
 			},
 		};
+	}
+
+	_crudeProtein(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CP).toFixed(2)), 0);
 	}
 
 	_eNDF_Calculation(feeds) {
