@@ -36,7 +36,9 @@ export class MathService {
 		const cost = this._costCalculation(feeds);
 		const NDF = this._NDF_Calculation(feeds);
 		const eNDF = this._eNDF_Calculation(feeds);
-		const crudeProtein = this._crudeProtein(feeds);
+		const crudeProtein = this._crudeProteinCalculation(feeds);
+		const DIP = this._DIP_Calculation(feeds);
+		const Potassium = this._PotassiumCalculation(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -63,12 +65,28 @@ export class MathService {
 						value: crudeProtein,
 						status: crudeProtein < 14 ? 'Дефіцит' : crudeProtein < 19 ? 'Достатньо' : 'Надлишок',
 					},
+					DIP: {
+						value: DIP,
+						status: DIP < 7 ? 'Дефіцит' : DIP < 10 ? 'Достатньо' : 'Надлишок',
+					},
+					Potassium: {
+						value: Potassium,
+						status: Potassium < 0.4 ? 'Дефіцит' : Potassium < 0.7 ? 'Достатньо' : 'Надлишок',
+					},
 				},
 			},
 		};
 	}
 
-	_crudeProtein(feeds) {
+	_PotassiumCalculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.K).toFixed(2)), 0);
+	}
+
+	_DIP_Calculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.DIP).toFixed(2)), 0);
+	}
+
+	_crudeProteinCalculation(feeds) {
 		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CP).toFixed(2)), 0);
 	}
 
