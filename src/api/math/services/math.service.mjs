@@ -34,7 +34,7 @@ export class MathService {
 		const TDN_Report = this._TDN_ReportCalculation(TDN_array);
 		const calculatedMoistureOfASISmixture = this._calculatedMoistureOfASISmixture(C_A_R[0], C_A_R[1]);
 		const cost = this._costCalculation(feeds);
-
+		const NDF = this._NDF_Calculation(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -49,9 +49,17 @@ export class MathService {
 					TDN: TDN_Report,
 					calculatedMoistureOfASISmixture,
 					cost,
+					NDF: {
+						value: NDF,
+						status: NDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
+					},
 				},
 			},
 		};
+	}
+
+	_NDF_Calculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.NDF).toFixed(2)), 0);
 	}
 
 	_costCalculation(feeds) {
