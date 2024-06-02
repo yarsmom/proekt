@@ -8,6 +8,7 @@ export class MathController {
 	async calculationOfFeedMixture(req, res) {
 		try {
 			const data = req.body;
+			data.login = req.user.login;
 			const result = await this.mathService.calculationOfFeedMixture(data);
 			res.status(result.status).send(result.data);
 		} catch (error) {

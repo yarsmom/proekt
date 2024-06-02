@@ -1,10 +1,12 @@
 import { CowService } from '../../cow/services/cow.service.mjs';
 import { FeedService } from '../../feed/services/feed.service.mjs';
+import { ReportService } from '../../report/services/report.service.mjs';
 
 export class MathService {
 	constructor() {
 		this.feedService = new FeedService();
 		this.cowService = new CowService();
+		this.reportService = new ReportService();
 	}
 
 	async calculationOfFeedMixture(data) {
@@ -14,10 +16,7 @@ export class MathService {
 		let AnimalWeight = data.AnimalWeight * numberCow;
 		const feeds = await this.feedService.getManyFeedByIds(feedArrayId);
 		const cow = await this.cowService.getCowById(cowId);
-		console.log('feeds :>> ', feeds);
-		console.log('cow :>> ', cow);
 		const GAIN = this._GAINCalculation({ DMFEDDAY, AnimalWeight, feeds, cow });
-		console.log('GAIN :>> ', GAIN);
 		const PROT = this._PROTCalculation({ AnimalWeight, cow, GAIN });
 		const CALC = this._CALCCalculation({ AnimalWeight, cow, GAIN });
 		const PHOS = this._PHOSCalculation({ AnimalWeight, cow, GAIN });
@@ -56,120 +55,106 @@ export class MathService {
 		const Manganese = this._Elems_Sum(MN);
 		const SE = this._Elems_Calculation(feeds, C_A_R[0], 'SE');
 		const Selenium = this._Elems_Sum(SE);
-		// console.log('offeredDMI :>> ', offeredDMI);
-		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
-		// console.log('OfferVsAllov :>> ', OfferVsAllov);
+		const reportData = {
+			userLogin: data.login,
+			NEmMegacalCWT_DRY,
+			MultipleOfNem,
+			MEMegcalCWT,
+			NEgMegacalCWT,
+			TDN: TDN_Report,
+			calculatedMoistureOfASISmixture,
+			cost,
+			PROT,
+			CALC,
+			PHOS,
+			AFamt,
+			OfferVsAllov,
+			NDF: {
+				value: NDF,
+				status: NDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
+			},
+			eNDS: {
+				value: eNDF,
+				status: eNDF < 24 ? 'Дефіцит' : eNDF < 34 ? 'Достатньо' : 'Надлишок',
+			},
+			crudeProtein: {
+				value: crudeProtein,
+				status: crudeProtein < 14 ? 'Дефіцит' : crudeProtein < 19 ? 'Достатньо' : 'Надлишок',
+			},
+			DIP: {
+				value: DIP,
+				status: DIP < 7 ? 'Дефіцит' : DIP < 10 ? 'Достатньо' : 'Надлишок',
+			},
+			Potassium: {
+				value: Potassium,
+				status: Potassium < 0.4 ? 'Дефіцит' : Potassium < 0.7 ? 'Достатньо' : 'Надлишок',
+			},
+			Calcium: {
+				value: Calcium,
+				status: Calcium < 0.34 ? 'Дефіцит' : Calcium < 0.9 ? 'Достатньо' : 'Надлишок',
+			},
+			Phosphorus: {
+				value: Phosphorus,
+				status:
+					Phosphorus < 0.24
+						? 'Дефіцит'
+						: Phosphorus < 0.6
+							? 'Достатньо'
+							: Phosphorus < 0.9
+								? 'Надлишок'
+								: 'Токсична',
+			},
+			Magnesium: {
+				value: Magnesium,
+				status:
+					Magnesium < 0.17
+						? 'Дефіцит'
+						: Magnesium < 0.3
+							? 'Достатньо'
+							: Magnesium < 0.7
+								? 'Надлишок'
+								: 'Токсична',
+			},
+			Sulfur: {
+				value: Sulfur,
+				status: Sulfur < 0.07 ? 'Дефіцит' : Sulfur < 0.1 ? 'Достатньо' : Sulfur < 0.3 ? 'Надлишок' : 'Токсична',
+			},
+			Cobalt: {
+				value: Cobalt,
+				status: Cobalt < 0.06 ? 'Дефіцит' : Cobalt < 0.1 ? 'Достатньо' : Cobalt < 4.9 ? 'Надлишок' : 'Токсична',
+			},
+			Copper: {
+				value: Copper,
+				status: Copper < 3 ? 'Дефіцит' : Copper < 9 ? 'Достатньо' : Copper < 114 ? 'Надлишок' : 'Токсична',
+			},
+			Iron: {
+				value: Iron,
+				status: Iron < 49 ? 'Дефіцит' : Iron < 99 ? 'Достатньо' : Iron < 999 ? 'Надлишок' : 'Токсична',
+			},
+			Manganese: {
+				value: Manganese,
+				status:
+					Manganese < 19
+						? 'Дефіцит'
+						: Manganese < 49
+							? 'Достатньо'
+							: Manganese < 999
+								? 'Надлишок'
+								: 'Токсична',
+			},
+			Selenium: {
+				value: Selenium,
+				status:
+					Selenium < 19 ? 'Дефіцит' : Selenium < 39 ? 'Достатньо' : Selenium < 499 ? 'Надлишок' : 'Токсична',
+			},
+		};
+
+		const newReport = await this.reportService.createReport(reportData);
+
 		return {
 			status: 200,
 			data: {
-				report: {
-					NEmMegacalCWT_DRY,
-					MultipleOfNem,
-					MEMegcalCWT,
-					NEgMegacalCWT,
-					TDN: TDN_Report,
-					calculatedMoistureOfASISmixture,
-					cost,
-					NDF: {
-						value: NDF,
-						status: NDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
-					},
-					eNDS: {
-						value: eNDF,
-						status: eNDF < 24 ? 'Дефіцит' : eNDF < 34 ? 'Достатньо' : 'Надлишок',
-					},
-					crudeProtein: {
-						value: crudeProtein,
-						status: crudeProtein < 14 ? 'Дефіцит' : crudeProtein < 19 ? 'Достатньо' : 'Надлишок',
-					},
-					DIP: {
-						value: DIP,
-						status: DIP < 7 ? 'Дефіцит' : DIP < 10 ? 'Достатньо' : 'Надлишок',
-					},
-					Potassium: {
-						value: Potassium,
-						status: Potassium < 0.4 ? 'Дефіцит' : Potassium < 0.7 ? 'Достатньо' : 'Надлишок',
-					},
-					Calcium: {
-						value: Calcium,
-						status: Calcium < 0.34 ? 'Дефіцит' : Calcium < 0.9 ? 'Достатньо' : 'Надлишок',
-					},
-					Phosphorus: {
-						value: Phosphorus,
-						status:
-							Phosphorus < 0.24
-								? 'Дефіцит'
-								: Phosphorus < 0.6
-									? 'Достатньо'
-									: Phosphorus < 0.9
-										? 'Надлишок'
-										: 'Токсична',
-					},
-					Magnesium: {
-						value: Magnesium,
-						status:
-							Magnesium < 0.17
-								? 'Дефіцит'
-								: Magnesium < 0.3
-									? 'Достатньо'
-									: Magnesium < 0.7
-										? 'Надлишок'
-										: 'Токсична',
-					},
-					Sulfur: {
-						value: Sulfur,
-						status:
-							Sulfur < 0.07
-								? 'Дефіцит'
-								: Sulfur < 0.1
-									? 'Достатньо'
-									: Sulfur < 0.3
-										? 'Надлишок'
-										: 'Токсична',
-					},
-					Cobalt: {
-						value: Cobalt,
-						status:
-							Cobalt < 0.06
-								? 'Дефіцит'
-								: Cobalt < 0.1
-									? 'Достатньо'
-									: Cobalt < 4.9
-										? 'Надлишок'
-										: 'Токсична',
-					},
-					Copper: {
-						value: Copper,
-						status:
-							Copper < 3 ? 'Дефіцит' : Copper < 9 ? 'Достатньо' : Copper < 114 ? 'Надлишок' : 'Токсична',
-					},
-					Iron: {
-						value: Iron,
-						status: Iron < 49 ? 'Дефіцит' : Iron < 99 ? 'Достатньо' : Iron < 999 ? 'Надлишок' : 'Токсична',
-					},
-					Manganese: {
-						value: Manganese,
-						status:
-							Manganese < 19
-								? 'Дефіцит'
-								: Manganese < 49
-									? 'Достатньо'
-									: Manganese < 999
-										? 'Надлишок'
-										: 'Токсична',
-					},
-					Selenium: {
-						value: Selenium,
-						status:
-							Selenium < 19
-								? 'Дефіцит'
-								: Selenium < 39
-									? 'Достатньо'
-									: Selenium < 499
-										? 'Надлишок'
-										: 'Токсична',
-					},
-				},
+				report: newReport,
 			},
 		};
 	}
