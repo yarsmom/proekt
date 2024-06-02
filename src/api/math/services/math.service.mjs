@@ -29,10 +29,15 @@ export class MathService {
 		const NEmMegacalCWT_DRY = this._NEmMegacalCWTCalculationDRY(feeds);
 		const MultipleOfNem = this._MultipleOfNemCalculation(NEmMegacalCWT_DM, NEmMegacalCWT_DRY);
 		const MEMegcalCWT = this._MEMegcalCWTCalculation(feeds);
+		const NEgMegacalCWT = this._NEgMegacalCWTCalculation(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
-		return { status: 200, data: { report: { NEmMegacalCWT_DRY, MultipleOfNem, MEMegcalCWT } } };
+		return { status: 200, data: { report: { NEmMegacalCWT_DRY, MultipleOfNem, MEMegcalCWT, NEgMegacalCWT } } };
+	}
+
+	_NEgMegacalCWTCalculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.NEg).toFixed(2)), 0);
 	}
 
 	_MEMegcalCWTCalculation(feeds) {
