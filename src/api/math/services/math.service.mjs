@@ -40,6 +40,7 @@ export class MathService {
 		const DIP = this._DIP_Calculation(feeds);
 		const Potassium = this._PotassiumCalculation(feeds);
 		const Calcium = this._CalciumCalculation(feeds);
+		const Phosphorus = this._PhosphorusCalculation(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -78,9 +79,24 @@ export class MathService {
 						value: Calcium,
 						status: Calcium < 0.34 ? 'Дефіцит' : Calcium < 0.9 ? 'Достатньо' : 'Надлишок',
 					},
+					Phosphorus: {
+						value: Phosphorus,
+						status:
+							Phosphorus < 0.24
+								? 'Дефіцит'
+								: Phosphorus < 0.6
+									? 'Достатньо'
+									: Phosphorus < 0.9
+										? 'Надлишок'
+										: 'Токсична',
+					},
 				},
 			},
 		};
+	}
+
+	_PhosphorusCalculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.P).toFixed(2)), 0);
 	}
 
 	_CalciumCalculation(feeds) {
