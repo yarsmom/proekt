@@ -25,14 +25,19 @@ export class MathService {
 		const NDFallowableDMI = this._NDFallowableDMICalculation(feeds);
 		const OfferVsAllov = this._offerVsAllovCalculation(offeredDMI, NDFallowableDMI);
 		const _C_A_R = this._C_A_R_Calculation(DMamt, feeds, DMFEDDAY);
-		const NEmMegacalCWT = this._NEmMegacalCWTCalculation(AnimalWeight, DMFEDDAY);
+		const NEmMegacalCWT_DM = this._NEmMegacalCWTCalculationDM(AnimalWeight, DMFEDDAY);
+		const NEmMegacalCWT_DRY = this._NEmMegacalCWTCalculationDRY(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
-		return { status: 200, data: { report: { NEmMegacalCWT } } };
+		return { status: 200, data: { report: { NEmMegacalCWT_DRY } } };
 	}
 
-	_NEmMegacalCWTCalculation(AnimalWeight, DMFEDDAY) {
+	_NEmMegacalCWTCalculationDRY(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.NEm).toFixed(2)), 0);
+	}
+
+	_NEmMegacalCWTCalculationDM(AnimalWeight, DMFEDDAY) {
 		const numerator = parseFloat(((AnimalWeight / 2.2) ** 0.75).toFixed(2));
 		const denominator = parseFloat((DMFEDDAY / 100).toFixed(2));
 		const NEmMegacalCWT = parseFloat((0.077 * (numerator / denominator)).toFixed(2));
