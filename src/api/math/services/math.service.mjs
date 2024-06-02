@@ -39,6 +39,7 @@ export class MathService {
 		const crudeProtein = this._crudeProteinCalculation(feeds);
 		const DIP = this._DIP_Calculation(feeds);
 		const Potassium = this._PotassiumCalculation(feeds);
+		const Calcium = this._CalciumCalculation(feeds);
 		// console.log('offeredDMI :>> ', offeredDMI);
 		// console.log('NDFallowableDMI :>> ', NDFallowableDMI);
 		// console.log('OfferVsAllov :>> ', OfferVsAllov);
@@ -73,9 +74,17 @@ export class MathService {
 						value: Potassium,
 						status: Potassium < 0.4 ? 'Дефіцит' : Potassium < 0.7 ? 'Достатньо' : 'Надлишок',
 					},
+					Calcium: {
+						value: Calcium,
+						status: Calcium < 0.34 ? 'Дефіцит' : Calcium < 0.9 ? 'Достатньо' : 'Надлишок',
+					},
 				},
 			},
 		};
+	}
+
+	_CalciumCalculation(feeds) {
+		return feeds.reduce((sum, feed) => parseFloat((sum + feed.CA).toFixed(2)), 0);
 	}
 
 	_PotassiumCalculation(feeds) {
