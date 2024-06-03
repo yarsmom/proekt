@@ -56,6 +56,9 @@ export class MathService {
 		const SE = this._Elems_Calculation(feeds, C_A_R[0], 'SE');
 		const Selenium = this._Elems_Sum(SE);
 		const reportData = {
+			DMamt,
+			GAIN,
+			feedIds: feedArrayId,
 			userLogin: data.login,
 			NEmMegacalCWT_DRY,
 			MultipleOfNem,

@@ -3,6 +3,7 @@ import { feedRouter } from './api/feed/routes/feed.router.mjs';
 import { cowRouter } from './api/cow/routers/cow.router.mjs';
 import { mathRouter } from './api/math/routers/math.router.mjs';
 import { reportRouter } from './api/report/routers/report.router.mjs';
+import { analyticsRouter } from './api/analytics/routers/analytics.router.mjs';
 import express from 'express';
 import * as dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -25,7 +26,7 @@ mongoose
 app.use(cors());
 app.use(express.json());
 app.use(morgan('common'));
-app.use('/api', [userRouter, feedRouter, cowRouter, mathRouter, reportRouter]);
+app.use('/api', [userRouter, feedRouter, cowRouter, mathRouter, reportRouter, analyticsRouter]);
 
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`);

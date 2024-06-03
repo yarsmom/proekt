@@ -7,6 +7,9 @@ const nutrientSchema = new Schema({
 });
 
 const reportSchema = new Schema({
+	DMamt: Array,
+	feedIds: Array,
+	GAIN: Number,
 	userLogin: String,
 	NEmMegacalCWT_DRY: Number,
 	MultipleOfNem: Number,
