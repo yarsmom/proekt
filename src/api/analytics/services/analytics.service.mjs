@@ -10,10 +10,6 @@ export class AnalyticsService {
 	async analytics(login) {
 		const { data: reports } = await this.reportService.getAllReportByUserLogin(login);
 		if (!reports.length) return { status: 404, data: { massage: 'Not found reports' } };
-		const feedPromises = reports.map((report) => {
-			return this.feedService.getManyFeedByIds(report.feedIds);
-		});
-
 		const resultFeedDMamt = { GAIN: 0 };
 		for (let report of reports) {
 			let i = 0;
