@@ -9,6 +9,7 @@ const nutrientSchema = new Schema({
 });
 
 const reportSchema = new Schema({
+	name: String,
 	cowId: { type: ObjectId, ref: 'Cow' },
 	DMamt: Array,
 	feedIds: Array,

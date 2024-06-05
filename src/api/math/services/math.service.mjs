@@ -12,7 +12,7 @@ export class MathService {
 	async calculationOfFeedMixture(data) {
 		const isValidParams = this._isValidParams(data);
 		if (!isValidParams) return { status: 400, data: { message: 'Invalid Credetians' } };
-		const { DMFEDDAY, numberCow, DMamt, feedArrayId, cowId } = data;
+		const { DMFEDDAY, numberCow, DMamt, feedArrayId, cowId, name } = data;
 		let AnimalWeight = data.AnimalWeight * numberCow;
 		const feeds = await this.feedService.getManyFeedByIds(feedArrayId);
 		const cow = await this.cowService.getCowById(cowId);
@@ -63,6 +63,7 @@ export class MathService {
 		const SE = this._Elems_Calculation(feeds, C_A_R[0], 'SE');
 		const Selenium = this._Elems_Sum(SE);
 		const reportData = {
+			name,
 			cowId: cow._id,
 			DMamt,
 			GAIN,
