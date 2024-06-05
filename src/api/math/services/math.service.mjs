@@ -34,13 +34,20 @@ export class MathService {
 		const TDN_Report = this._TDN_ReportCalculation(TDN_array);
 		const calculatedMoistureOfASISmixture = this._calculatedMoistureOfASISmixture(C_A_R[0], C_A_R[1]);
 		const cost = this._sumElemFeedCalculation(feeds, 'CostCWT');
-		const NDF = this._sumElemFeedCalculation(feeds, 'NDF');
-		const eNDF = this._sumElemFeedCalculation(feeds, 'eNDF');
-		const crudeProtein = this._sumElemFeedCalculation(feeds, 'CP');
-		const DIP = this._sumElemFeedCalculation(feeds, 'DIP');
-		const Potassium = this._sumElemFeedCalculation(feeds, 'K');
-		const Calcium = this._sumElemFeedCalculation(feeds, 'CA');
-		const Phosphorus = this._sumElemFeedCalculation(feeds, 'P');
+		const NDF1 = this._Elems_Calculation(feeds, C_A_R[0], 'NDF');
+		const NDF = this._Elems_Sum(NDF1);
+		const eNDF1 = this._Elems_Calculation(feeds, C_A_R[0], 'eNDF');
+		const eNDF = this._Elems_Sum(eNDF1);
+		const crudeProtein1 = this._Elems_Calculation(feeds, C_A_R[0], 'CP');
+		const crudeProtein = this._Elems_Sum(crudeProtein1);
+		const DIP1 = this._Elems_Calculation(feeds, C_A_R[0], 'DIP');
+		const DIP = this._Elems_Sum(DIP1);
+		const Potassium1 = this._Elems_Calculation(feeds, C_A_R[0], 'K');
+		const Potassium = this._Elems_Sum(Potassium1);
+		const Calcium1 = this._Elems_Calculation(feeds, C_A_R[0], 'CA');
+		const Calcium = this._Elems_Sum(Calcium1);
+		const Phosphorus1 = this._Elems_Calculation(feeds, C_A_R[0], 'P');
+		const Phosphorus = this._Elems_Sum(Phosphorus1);
 		const MG = this._Elems_Calculation(feeds, C_A_R[0], 'MG');
 		const Magnesium = this._Elems_Sum(MG);
 		const S = this._Elems_Calculation(feeds, C_A_R[0], 'S');
@@ -74,11 +81,11 @@ export class MathService {
 			OfferVsAllov,
 			NDF: {
 				value: NDF,
-				status: NDF < 24 ? 'Дефіцит' : NDF < 34 ? 'Достатньо' : 'Надлишок',
+				status: NDF < 30 ? 'Дефіцит' : 'Достатньо',
 			},
 			eNDS: {
 				value: eNDF,
-				status: eNDF < 24 ? 'Дефіцит' : eNDF < 34 ? 'Достатньо' : 'Надлишок',
+				status: eNDF < 30 ? 'Дефіцит' : 'Достатньо',
 			},
 			crudeProtein: {
 				value: crudeProtein,
@@ -128,11 +135,11 @@ export class MathService {
 			},
 			Copper: {
 				value: Copper,
-				status: Copper < 3 ? 'Дефіцит' : Copper < 9 ? 'Достатньо' : Copper < 114 ? 'Надлишок' : 'Токсична',
+				status: Copper < 3 ? 'Дефіцит' : Copper < 10 ? 'Достатньо' : Copper < 114 ? 'Надлишок' : 'Токсична',
 			},
 			Iron: {
 				value: Iron,
-				status: Iron < 49 ? 'Дефіцит' : Iron < 99 ? 'Достатньо' : Iron < 999 ? 'Надлишок' : 'Токсична',
+				status: Iron < 49 ? 'Дефіцит' : Iron < 100 ? 'Достатньо' : Iron < 999 ? 'Надлишок' : 'Токсична',
 			},
 			Manganese: {
 				value: Manganese,
@@ -148,7 +155,13 @@ export class MathService {
 			Selenium: {
 				value: Selenium,
 				status:
-					Selenium < 19 ? 'Дефіцит' : Selenium < 39 ? 'Достатньо' : Selenium < 499 ? 'Надлишок' : 'Токсична',
+					Selenium < 0.19
+						? 'Дефіцит'
+						: Selenium < 0.39
+							? 'Достатньо'
+							: Selenium < 0.499
+								? 'Надлишок'
+								: 'Токсична',
 			},
 		};
 
