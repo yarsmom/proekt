@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
+
 const Schema = mongoose.Schema;
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const nutrientSchema = new Schema({
 	value: Number,
@@ -7,6 +9,7 @@ const nutrientSchema = new Schema({
 });
 
 const reportSchema = new Schema({
+	cowId: { type: ObjectId, ref: 'Cow' },
 	DMamt: Array,
 	feedIds: Array,
 	GAIN: Number,

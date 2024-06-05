@@ -63,6 +63,7 @@ export class MathService {
 		const SE = this._Elems_Calculation(feeds, C_A_R[0], 'SE');
 		const Selenium = this._Elems_Sum(SE);
 		const reportData = {
+			cowId: cow._id,
 			DMamt,
 			GAIN,
 			feedIds: feedArrayId,
